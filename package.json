@@ -2,6 +2,7 @@
     "name": "listener-poc",
     "version": "0.0.1",
     "dependencies": {
+        "edge": "^7.10.1",
         "nfc-pcsc": "^0.6.1"
     }
 }

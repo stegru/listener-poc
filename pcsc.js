@@ -2,6 +2,8 @@
 
 var NFC = require("nfc-pcsc").NFC;
 
+var ndef = require("./ndef.js");
+
 var debug = process.argv.indexOf("debug") > -1;
 
 var logger = debug ? {
@@ -155,29 +157,13 @@ function authenticateBlock(reader, block) {
     });
 }
 
-function expect(actual, expected, message) {
-    console.assert(expected === actual, message, expected, actual);
-}
-
 nfc.on("reader", function (reader) {
     reader.autoProcessing = false;
     reader.on("card", function (card) {
 
         // [NFCForum-TS-NDEF_1.0: NFC Data Exchange Format (NDEF) Technical Specification]
         readTag(reader, 4).then(function (tag) {
-            // not fully reading the header - assumes the rest of the buffer is the payload.
-            var headerLength = 4;
-            expect(tag[0], 0xD1, "Record header (single record, short record length, well-known type name)");
-            expect(tag[1], 1, "type length (1)");
-            expect(tag[2], tag.length - headerLength, "payload length (rest of buffer)");
-            expect(tag[3], 0x54, "type field ('T': text)");
-
-            var payload = tag.slice(headerLength);
-            expect(payload[0], 0x02, "status byte (utf-8, 2 byte language)");
-            expect(payload.toString("ascii", 1, 3), "en", "language code (en)");
-
-            // the climax:
-            var text = payload.toString("ascii", 3, tag.length - headerLength);
+            var text = ndef.getTagText(tag);
             console.log("tag text: '" + text + "'");
         }, console.error);
     });
