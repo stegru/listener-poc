@@ -19,6 +19,7 @@ Free features:
 * Card readers can be removed/added.
 
 ## Proximity device (VAIO internal card reader)
+[proximity.js](proximity.js): Reads a simple NFC tag from the proximity device.
 
 ```
 node proximity.js
@@ -27,3 +28,9 @@ node proximity.js
 * Uses a slither of C#.
 * Tested with electron (gpii-app).
 * Re-uses the same NDEF parsing code as the PC/SC listener.
+
+## USB Drive
+
+* In [stegru/windows#GPII-2294-experimental](https://github.com/stegru/windows/blob/GPII-2294-experimental/gpii/node_modules/listeners/src/usb.js)
+* USB detection is windows-only.
+* Tested with electron (gpii-app).
